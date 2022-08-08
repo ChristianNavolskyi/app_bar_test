@@ -64,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
   PreferredSizeWidget _buildAppBar() {
     switch (_counter % 3) {
       case 0:
+
+        /// Column without bottom in app bar is working
         return PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight + 50),
           child: Column(
@@ -75,37 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AppBar(
                 title: Text(widget.title),
-                // bottom: PreferredSize(
-                //   preferredSize: Size.fromHeight(50),
-                //   child: Container(
-                //     height: 50,
-                //     child: Text("bottom"),
-                //   ),
-                // ),
               ),
             ],
           ),
         );
       case 1:
-        return PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 50),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppBar(
-                title: Text(widget.title),
-                bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(50),
-                  child: SizedBox(
-                    height: 50,
-                    child: Text("bottom"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      case 2:
+
+        /// App bar bottom without surrounding column is working
         return PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight + 50),
           child: AppBar(
@@ -117,6 +95,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("bottom"),
               ),
             ),
+          ),
+        );
+      case 2:
+
+        /// Column with bottom in app bar is not working
+        return PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 50 + 50),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 50,
+                child: Text("top"),
+              ),
+              AppBar(
+                title: Text(widget.title),
+                bottom: const PreferredSize(
+                  preferredSize: Size.fromHeight(50),
+                  child: SizedBox(
+                    height: 50,
+                    child: Text("bottom"),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
     }
@@ -135,43 +138,45 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
